@@ -1,40 +1,554 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vasilije Milosavljevic - Programming Portfolio</title>
-    <meta name="description" content="Programming portfolio showcasing projects and skills by Vasilije Milosavljevic" />
-    <meta name="author" content="Vasilije Milosavljevic" />
 
-    <meta property="og:title" content="Vasilije Milosavljevic - Programming Portfolio" />
-    <meta property="og:description" content="Programming portfolio showcasing projects and skills" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XRD Simulator - Rentgenska Difrakcija</title>
     <style>
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
 
-      @keyframes fadeOut {
-        from {
-          opacity: 1;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        to {
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .controls {
+            background: #f8f9fa;
+            padding: 30px;
+            border-right: 2px solid #e0e0e0;
+            overflow-y: auto;
+            max-height: 800px;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        select, input[type="number"], input[type="range"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="range"] {
+            padding: 0;
+            height: 8px;
+            background: #ddd;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .value-display {
+            display: inline-block;
+            margin-left: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .visualization {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        canvas {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .peak-info {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .peak-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }
+
+        .peak-item:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚛️ XRD Simulator</h1>
+            <p class="subtitle">Simulator Rentgenske Difrakcije - Interaktivna Analiza Kristalnih Struktura</p>
+        </header>
+
+        <div class="main-content">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="crystal">Kristalna Struktura:</label>
+                    <select id="crystal">
+                        <option value="fcc">FCC - Kubna Plošno Centrirana</option>
+                        <option value="bcc">BCC - Kubna Zapreminski Centrirana</option>
+                        <option value="simple">Prosta Kubna</option>
+                        <option value="hcp">HCP - Heksagonalna Zbija</option>
+                        <option value="diamond">Dijamant</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="lattice">Konstanta Rešetke (Å):</label>
+                    <input type="number" id="lattice" value="3.5" min="2" max="6" step="0.1">
+                    <input type="range" id="latticeRange" value="3.5" min="2" max="6" step="0.1">
+                    <span class="value-display" id="latticeValue">3.5 Å</span>
+                </div>
+
+                <div class="control-group">
+                    <label for="wavelength">Talasna Dužina X-zraka (Å):</label>
+                    <select id="wavelength">
+                        <option value="1.5406">Cu Kα (1.5406 Å)</option>
+                        <option value="0.7107">Mo Kα (0.7107 Å)</option>
+                        <option value="1.9373">Co Kα (1.9373 Å)</option>
+                        <option value="2.2909">Cr Kα (2.2909 Å)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="peakWidth">Širina Pikova:</label>
+                    <input type="range" id="peakWidth" value="0.5" min="0.1" max="2" step="0.1">
+                    <span class="value-display" id="peakWidthValue">0.5°</span>
+                </div>
+
+                <div class="control-group">
+                    <label for="temperature">Temperatura (K):</label>
+                    <input type="number" id="temperature" value="300" min="0" max="1500" step="10">
+                    <input type="range" id="temperatureRange" value="300" min="0" max="1500" step="10">
+                    <span class="value-display" id="temperatureValue">300 K</span>
+                </div>
+
+                <div class="control-group">
+                    <label for="noise">Nivo Šuma:</label>
+                    <input type="range" id="noise" value="0" min="0" max="10" step="0.5">
+                    <span class="value-display" id="noiseValue">0%</span>
+                </div>
+
+                <button onclick="generatePattern()">🔬 Generiši Difrakcionu Sliku</button>
+                <button onclick="exportData()">💾 Izvezi Podatke</button>
+                <button onclick="resetSettings()">🔄 Resetuj Podešavanja</button>
+
+                <div class="info-box">
+                    <h3>ℹ️ Informacije</h3>
+                    <p>Ovaj simulator koristi Bragov zakon (nλ = 2d sinθ) za izračunavanje difrakcionih pikova.</p>
+                </div>
+            </div>
+
+            <div class="visualization">
+                <canvas id="xrdCanvas" width="900" height="500"></canvas>
+                
+                <div class="peak-info" id="peakInfo">
+                    <strong>Detektovani Pikovi:</strong>
+                    <div id="peakList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Globalne promenljive
+        let currentPeaks = [];
+
+        // Kristalne strukture i njihovi dozvoljeni refleksi
+        const crystalStructures = {
+            fcc: { name: 'FCC', allowed: (h, k, l) => (h + k + l) % 2 === 0 },
+            bcc: { name: 'BCC', allowed: (h, k, l) => (h + k + l) % 2 === 0 },
+            simple: { name: 'Prosta Kubna', allowed: (h, k, l) => true },
+            hcp: { name: 'HCP', allowed: (h, k, l) => true },
+            diamond: { name: 'Dijamant', allowed: (h, k, l) => {
+                const sum = h + k + l;
+                return (sum % 2 === 0) && (h % 2 === 0 && k % 2 === 0 && l % 2 === 0) || 
+                       (sum % 4 === 0 && (h % 2 !== 0 || k % 2 !== 0 || l % 2 !== 0));
+            }}
+        };
+
+        // Sinhronizacija input polja
+        function syncInputs() {
+            const lattice = document.getElementById('lattice');
+            const latticeRange = document.getElementById('latticeRange');
+            const latticeValue = document.getElementById('latticeValue');
+
+            lattice.addEventListener('input', (e) => {
+                latticeRange.value = e.target.value;
+                latticeValue.textContent = e.target.value + ' Å';
+            });
+
+            latticeRange.addEventListener('input', (e) => {
+                lattice.value = e.target.value;
+                latticeValue.textContent = e.target.value + ' Å';
+            });
+
+            const temperature = document.getElementById('temperature');
+            const temperatureRange = document.getElementById('temperatureRange');
+            const temperatureValue = document.getElementById('temperatureValue');
+
+            temperature.addEventListener('input', (e) => {
+                temperatureRange.value = e.target.value;
+                temperatureValue.textContent = e.target.value + ' K';
+            });
+
+            temperatureRange.addEventListener('input', (e) => {
+                temperature.value = e.target.value;
+                temperatureValue.textContent = e.target.value + ' K';
+            });
+
+            document.getElementById('peakWidth').addEventListener('input', (e) => {
+                document.getElementById('peakWidthValue').textContent = e.target.value + '°';
+            });
+
+            document.getElementById('noise').addEventListener('input', (e) => {
+                document.getElementById('noiseValue').textContent = e.target.value + '%';
+            });
+        }
+
+        // Generisanje difrakcionog obrasca
+        function generatePattern() {
+            const crystal = document.getElementById('crystal').value;
+            const lattice = parseFloat(document.getElementById('lattice').value);
+            const wavelength = parseFloat(document.getElementById('wavelength').value);
+            const peakWidth = parseFloat(document.getElementById('peakWidth').value);
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const noise = parseFloat(document.getElementById('noise').value);
+
+            currentPeaks = calculatePeaks(crystal, lattice, wavelength, temperature);
+            drawPattern(currentPeaks, peakWidth, noise);
+            displayPeakInfo(currentPeaks);
+        }
+
+        // Izračunavanje difrakcionih pikova
+        function calculatePeaks(crystal, a, lambda, temp) {
+            const peaks = [];
+            const structure = crystalStructures[crystal];
+
+            // Generisanje Miller-ovih indeksa
+            for (let h = 0; h <= 4; h++) {
+                for (let k = 0; k <= 4; k++) {
+                    for (let l = 0; l <= 4; l++) {
+                        if (h === 0 && k === 0 && l === 0) continue;
+                        if (!structure.allowed(h, k, l)) continue;
+
+                        // Izračunavanje d-rastojanja
+                        const d = a / Math.sqrt(h*h + k*k + l*l);
+                        
+                        // Bragov zakon: nλ = 2d sinθ
+                        const sinTheta = lambda / (2 * d);
+                        
+                        if (sinTheta <= 1) {
+                            const theta = Math.asin(sinTheta) * 180 / Math.PI;
+                            const twoTheta = 2 * theta;
+                            
+                            if (twoTheta <= 120) {
+                                // Faktor strukture i intenzitet
+                                const multiplicity = calculateMultiplicity(h, k, l);
+                                const lorentzPolarization = (1 + Math.cos(theta * Math.PI / 180)**2) / 
+                                                           (Math.sin(theta * Math.PI / 180) * Math.sin(2 * theta * Math.PI / 180));
+                                
+                                // Debye-Waller faktor (temperaturni efekat)
+                                const B = 0.5 + (temp - 300) * 0.001;
+                                const debyeWaller = Math.exp(-B * (Math.sin(theta * Math.PI / 180) / lambda)**2);
+                                
+                                let intensity = multiplicity * lorentzPolarization * debyeWaller * 100;
+                                
+                                peaks.push({
+                                    twoTheta: twoTheta,
+                                    intensity: intensity,
+                                    hkl: `(${h}${k}${l})`,
+                                    d: d.toFixed(3)
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Normalizacija intenziteta
+            const maxIntensity = Math.max(...peaks.map(p => p.intensity));
+            peaks.forEach(p => p.intensity = (p.intensity / maxIntensity) * 100);
+
+            return peaks.sort((a, b) => a.twoTheta - b.twoTheta);
+        }
+
+        // Izračunavanje multipliciteta
+        function calculateMultiplicity(h, k, l) {
+            const unique = new Set([h, k, l].map(Math.abs)).size;
+            if (unique === 1) return 6;
+            if (unique === 2) return 24;
+            return 48;
+        }
+
+        // Crtanje difrakcionog obrasca
+        function drawPattern(peaks, peakWidth, noise) {
+            const canvas = document.getElementById('xrdCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Brisanje platna
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // Margine
+            const margin = { top: 40, right: 40, bottom: 60, left: 70 };
+            const plotWidth = width - margin.left - margin.right;
+            const plotHeight = height - margin.top - margin.bottom;
+
+            // Crtanje osa
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin.left, margin.top);
+            ctx.lineTo(margin.left, height - margin.bottom);
+            ctx.lineTo(width - margin.right, height - margin.bottom);
+            ctx.stroke();
+
+            // Oznake osa
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('2θ (stepeni)', width / 2, height - 20);
+            
+            ctx.save();
+            ctx.translate(20, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Intenzitet (a.u.)', 0, 0);
+            ctx.restore();
+
+            // Crtanje pikova
+            const twoThetaMax = 120;
+            
+            peaks.forEach(peak => {
+                const x = margin.left + (peak.twoTheta / twoThetaMax) * plotWidth;
+                const peakHeight = (peak.intensity / 100) * plotHeight;
+                const y = height - margin.bottom - peakHeight;
+
+                // Gausova kriva za pik
+                ctx.strokeStyle = '#667eea';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                for (let i = -20; i <= 20; i++) {
+                    const offset = i * 0.1;
+                    const gaussian = Math.exp(-(offset * offset) / (2 * peakWidth * peakWidth));
+                    const xi = margin.left + ((peak.twoTheta + offset) / twoThetaMax) * plotWidth;
+                    const yi = height - margin.bottom - peakHeight * gaussian;
+                    
+                    if (i === -20) {
+                        ctx.moveTo(xi, yi);
+                    } else {
+                        ctx.lineTo(xi, yi);
+                    }
+                }
+                ctx.stroke();
+
+                // Oznaka Miller-ovih indeksa
+                ctx.fillStyle = '#764ba2';
+                ctx.font = '11px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(peak.hkl, x, y - 10);
+            });
+
+            // Dodavanje šuma
+            if (noise > 0) {
+                ctx.strokeStyle = 'rgba(150, 150, 150, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                
+                for (let i = 0; i < plotWidth; i++) {
+                    const x = margin.left + i;
+                    const noiseVal = (Math.random() - 0.5) * noise * 2;
+                    const y = height - margin.bottom - noiseVal;
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.stroke();
+            }
+
+            // Oznake na osama
+            ctx.fillStyle = '#666';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i <= 120; i += 20) {
+                const x = margin.left + (i / twoThetaMax) * plotWidth;
+                ctx.fillText(i, x, height - margin.bottom + 20);
+                
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, margin.top);
+                ctx.lineTo(x, height - margin.bottom);
+                ctx.stroke();
+            }
+
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 100; i += 20) {
+                const y = height - margin.bottom - (i / 100) * plotHeight;
+                ctx.fillText(i, margin.left - 10, y + 5);
+                
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(margin.left, y);
+                ctx.lineTo(width - margin.right, y);
+                ctx.stroke();
+            }
+        }
+
+        // Prikaz informacija o pikovima
+        function displayPeakInfo(peaks) {
+            const peakList = document.getElementById('peakList');
+            peakList.innerHTML = '';
+
+            peaks.forEach((peak, index) => {
+                const div = document.createElement('div');
+                div.className = 'peak-item';
+                div.innerHTML = `
+                    <strong>Pik ${index + 1}:</strong> 
+                    2θ = ${peak.twoTheta.toFixed(2)}°, 
+                       to {
           opacity: 0;
         }
       }
